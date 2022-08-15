@@ -1,9 +1,18 @@
+import abc
 import sys
 import time
+import datetime
 import threading
 import urllib.parse
 
 from .constants import *
+
+
+class Serializeable(abc.ABC):
+    @abc.abstractmethod
+    def to_json(self) -> str:
+        """Convert instance to a JSON string"""
+        raise NotImplementedError
 
 
 class AsyncSpinner(threading.Thread):
@@ -34,4 +43,11 @@ def valid_url(url: str = DEFAULT_URL) -> str:
         return url
 
 
-__all__ = ("valid_url", "AsyncSpinner")
+def valid_date(date: str) -> str:
+    try:
+        return datetime.datetime.strptime(date, DATE_FORMAT).strftime(DATE_FORMAT)
+    except ValueError:
+        raise ValueError(f"invalid date format: expected {DATE_FORMAT}")
+
+
+__all__ = ("valid_url", "AsyncSpinner", "Serializeable", "valid_date")
