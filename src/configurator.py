@@ -1,3 +1,4 @@
+import sys
 import json
 import pathlib
 import dataclasses
@@ -24,14 +25,19 @@ class Config:
         cls, config_file: pathlib.Path = pathlib.Path(DEFAULT_CONFIG_FILE)
     ) -> "Config":
 
-        with open(config_file) as f:
-            data = json.load(f)
+        try:
+            with open(config_file) as f:
+                data = json.load(f)
 
-        res_ids = data["res_ids"]
-        headers = data["headers"]
-        cookies = data["cookies"]
+            res_ids = data["res_ids"]
+            headers = data["headers"]
+            cookies = data["cookies"]
 
-        return cls(res_ids, headers, cookies)
+            return cls(res_ids, headers, cookies)
+        except (KeyError, json.JSONDecodeError):
+            sys.stderr.write("error: invalid config file")
+        except FileNotFoundError:
+            sys.stderr.write(f'error: config file "{config_file}" not found')
 
     @classmethod
     def from_node_fetch(cls, node_fetch: str) -> "Config":
