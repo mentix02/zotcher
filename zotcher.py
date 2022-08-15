@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from lib import run
+from src import run
 
 if __name__ == "__main__":
     run()
