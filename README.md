@@ -1,8 +1,29 @@
 # Zotcher
 
-A simple (unofficial) Zomato Partner API client library.
+![GitHub top language](https://img.shields.io/github/languages/top/mentix02/zotcher)
+![GitHub](https://img.shields.io/github/license/mentix02/zotcher)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-## Configuration
+> made with ❤️ by [mentix02](https://github.com/mentix02)
+
+A simple (unofficial) Zomato&trade; Partner API client library & CLI.
+
+**Note**: Zotcher is in no way affiliated with Zomato&trade; or any of its subsidiaries. All trademarks are the property of their respective owners. The project itself is licensed under the GPLv3 license.
+
+## Etymology
+
+Important things first.
+```
+Zomato™ + fetcher = Zotcher
+```
+
+## Motivation
+
+Zomato&trade; devs were too incompetent to provide order items in their CSV exports and after
+tearing my hair out by scraping their dashboard via client side Javascript, it became
+readily apparent that hacking around their private API would be far easier than sitting around and praying for them do the sensible thing. So I did.
+
+## Config & Usage
 
 Zotcher was built with convention over configuration in mind. All that is required by
 the user is the Node.js fetch call to 
