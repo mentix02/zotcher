@@ -1,19 +1,17 @@
-#!/usr/bin/env python3
-
 import io
+import sys
 import json
 import pathlib
+import datetime
 import argparse
 
 import requests
 
 from .utils import *
 from .constants import *
+from . import __version__
 from .payload import Payload
 from .configurator import Config
-
-__author__ = "mentix02"
-__version__ = "0.0.1a"
 
 
 def setup_configurator(configurator: argparse.ArgumentParser):
@@ -43,18 +41,25 @@ def setup_fetcher(fetcher: argparse.ArgumentParser):
         "--offset",
         type=int,
         default=0,
-        help="offset to start from",
+        help="offset to start from (default: 0)",
     )
     fetcher.add_argument(
         "-n",
         "--number",
         type=int,
         default=20,
-        help="number of orders to fetch",
+        help="number of orders to fetch in a batch (default 20)",
     )
     fetcher.add_argument(
         "outfile",
         help="output file to store response data",
+    )
+    fetcher.add_argument(
+        "-d",
+        "--end-date",
+        type=valid_date,
+        default=datetime.datetime.now().strftime(DATE_FORMAT),
+        help='end date to fetch orders 10 days prior to (default: today, format: "YYYY-MM-DD")',
     )
     fetcher.add_argument(
         "-c",
@@ -77,6 +82,7 @@ def run_fetch(
     offset: int,
     number: int,
     outfile: str,
+    end_date: str,
     config_file: pathlib.Path,
 ):
 
@@ -84,23 +90,41 @@ def run_fetch(
     payload = Payload(
         count=number,
         offSet=offset,
+        end_date=end_date,
         res_ids=config.res_ids,
-    ).to_json()
-
-    req = requests.post(
-        url,
-        data=payload,
-        headers=config.headers,
-        cookies=config.cookies,
     )
 
-    if req.status_code == 200:
-        response_data = req.json()
-        with open(outfile, "w+") as f:
-            json.dump(response_data["orders"], f, indent=2)
-    else:
-        print("\bError: ", req.text)
+    with requests.Session() as session, open(outfile, "w+") as of:
 
+        # begin json list
+        of.write("[")
+
+        session.headers.update(config.headers)
+        session.cookies.update(config.cookies)
+
+        while True:
+            response = session.post(url, data=payload.to_json())
+
+            if not response.ok:
+                sys.stderr.write(f"error: {response.status_code} {response.reason}")
+                continue
+
+            resp_data = response.json()
+
+            if new_orders := resp_data.get("orders"):
+                for idx, order in enumerate(new_orders):
+                    of.write(json.dumps(order, indent=2))
+                    if idx != len(new_orders) - 1:
+                        of.write(",")
+
+            if len(new_orders) < payload.count:
+                break
+            else:
+                of.write(",")
+
+            payload.offSet += len(new_orders)
+
+        of.write("]")
 
 def run():
 
