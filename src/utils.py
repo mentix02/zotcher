@@ -8,7 +8,7 @@ import urllib.parse
 from .constants import *
 
 
-class Serializeable(abc.ABC):
+class Serializable(abc.ABC):
     @abc.abstractmethod
     def to_json(self) -> str:
         """Convert instance to a JSON string"""
@@ -50,4 +50,4 @@ def valid_date(date: str) -> str:
         raise ValueError(f"invalid date format: expected {DATE_FORMAT}")
 
 
-__all__ = ("valid_url", "AsyncSpinner", "Serializeable", "valid_date")
+__all__ = ("valid_url", "AsyncSpinner", "Serializable", "valid_date")
