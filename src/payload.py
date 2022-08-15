@@ -5,10 +5,11 @@ import dataclasses
 from typing import Optional
 
 from .constants import *
+from .utils import Serializable
 
 
 @dataclasses.dataclass
-class Payload:
+class Payload(Serializable):
     """Payload structure to used to query the Zomato API"""
 
     res_ids: list[int]
