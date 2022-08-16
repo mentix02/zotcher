@@ -36,8 +36,10 @@ class Config:
             return cls(res_ids, headers, cookies)
         except (KeyError, json.JSONDecodeError):
             sys.stderr.write("error: invalid config file")
+            sys.exit(1)
         except FileNotFoundError:
             sys.stderr.write(f'error: config file "{config_file}" not found')
+            sys.exit(1)
 
     @classmethod
     def from_node_fetch(cls, node_fetch: str) -> "Config":
