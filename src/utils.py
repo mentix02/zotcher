@@ -41,6 +41,9 @@ def valid_url(url: str = DEFAULT_URL) -> str:
     result = urllib.parse.urlparse(url)
     if all([result.scheme, result.netloc]):
         return url
+    else:
+        sys.stderr.write(f"invalid URL: {url}")
+        sys.exit(1)
 
 
 def valid_date(date: str) -> str:
