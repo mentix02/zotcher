@@ -37,6 +37,13 @@ def setup_fetcher(fetcher: argparse.ArgumentParser):
         help="Zomato endpoint to send payload",
     )
     fetcher.add_argument(
+        "-D",
+        "--days",
+        type=int,
+        default=DEFAULT_DAYS,
+        help="number of days to fetch data for",
+    )
+    fetcher.add_argument(
         "-o",
         "--offset",
         type=int,
@@ -79,6 +86,7 @@ def run_config(infile: io.TextIOWrapper, outfile: str):
 
 def run_fetch(
     url: str,
+    days: int,
     offset: int,
     number: int,
     outfile: str,
@@ -88,6 +96,7 @@ def run_fetch(
 
     config = Config.from_config_file(config_file)
     payload = Payload(
+        days=days,
         count=number,
         offSet=offset,
         end_date=end_date,
@@ -109,7 +118,7 @@ def run_fetch(
                 sys.stderr.write(f"error: {response.status_code} {response.reason}")
                 continue
 
-            resp_data = response.json()
+            resp_data: dict = response.json()
 
             if new_orders := resp_data.get("orders"):
                 for idx, order in enumerate(new_orders):
@@ -125,6 +134,7 @@ def run_fetch(
             payload.offSet += len(new_orders)
 
         of.write("]")
+
 
 def run():
 
