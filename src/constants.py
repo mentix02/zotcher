@@ -1,3 +1,4 @@
+DEFAULT_DAYS = 10
 DATE_FORMAT = "%Y-%m-%d"
 DEFAULT_CONFIG_FILE = "config.json"
 DEFAULT_URL = "https://www.zomato.com/merchant-api/orders/fetch-orders-by-states"
@@ -21,6 +22,7 @@ DEFAULT_HEADERS = {
 __all__ = (
     "DATE_FORMAT",
     "DEFAULT_URL",
+    "DEFAULT_DAYS",
     "DEFAULT_HEADERS",
     "DEFAULT_CONFIG_FILE",
 )
