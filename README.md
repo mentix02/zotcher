@@ -10,6 +10,12 @@ A simple (unofficial) Zomato&trade; Partner API client library & CLI.
 
 **Note**: Zotcher is in no way affiliated with Zomato&trade; or any of its subsidiaries. All trademarks are the property of their respective owners. The project itself is licensed under the GPLv3 license.
 
+## Installation
+
+```
+pip install zotcher
+```
+
 ## Etymology
 
 Important things first.
@@ -33,7 +39,7 @@ that can be grabbed from Chrome's Network tab in it's developer tools.
 1. Open up the [Zomato Partner Dashboard](https://www.zomato.com/partners/onlineordering/orderHistory/) in Chrome.
 2. Open the developer tools (F12). Click on "Network".
 3. Right click `fetch-orders-by-states` and select "Copy" -> "Copy as Node.js fetch".
-![Copy Node.js fetch](imgs/Screenshot%202022-08-15%20at%2000.35.05.png)
+![Copy Node.js fetch](https://github.com/mentix02/zotcher/raw/master/imgs/Screenshot%202022-08-15%20at%2000.35.05.png)
 4. Paste the copied code into a file, e.g. `fetch.js`.
 5. Run the `config` command to generate a config file. This should create a `config.json` file.
 ```bash
